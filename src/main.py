@@ -1,4 +1,35 @@
-# main.py
+from flask import Flask, request
+import openai, telegram, subprocess
+import whisper
+
+app = Flask(__name__)
+
+# 환경변수 또는 하드코딩 (배포 전 .env로 대체)
+OPENAI_API_KEY = "your-openai-key"
+TELEGRAM_BOT_TOKEN = "your-telegram-token"
+TELEGRAM_CHAT_ID = "your-chat-id"
+
+bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+model = whisper.load_model("tiny")
+
+@app.route("/transcribe", methods=["POST"])
+def transcribe():
+    url = request.json.get("url")
+    subprocess.run(["yt-dlp", "-x", "--audio-format", "mp3", "-o", "audio.%(ext)s", url])
+    result = model.transcribe("audio.mp3", language="ko")
+    text = result["text"]
+
+    openai.api_key = OPENAI_API_KEY
+    res = openai.ChatCompletion.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": "다음은 Whisper로 전사된 한국어입니다. 오류를 고치고 핵심만 요약해 주세요."},
+            {"role": "user", "content": text}
+        ]
+    )
+    summary = res["choices"][0]["message"]["content"]
+    bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=summary)
+    return {"status": "ok", "summary": summary}# main.py
 # ~~~~~~~
 # openai-whisper transcriber-bot for Telegram
 
