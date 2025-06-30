@@ -17,7 +17,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel
 
 # Install Python dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
 COPY src src
@@ -35,4 +35,4 @@ ENV RUNNING_IN_DOCKER=true
 # RUN pwd
 
 # Define the default command to run the application
-CMD ["python3", "src/main.py"]
+CMD ["python", "src/main.py"]
