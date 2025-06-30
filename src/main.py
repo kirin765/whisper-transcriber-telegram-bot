@@ -1,11 +1,11 @@
 from flask import Flask, request
 import whisper, telegram, subprocess, os
 from openai import OpenAI
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import yt_dlp
 
 # 환경변수 불러오기
-load_dotenv()
+#load_dotenv()
 
 app = Flask(__name__)
 
