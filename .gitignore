@@ -50,3 +50,5 @@ venv/
 
 # backup files
 *.bak
+
+.env
