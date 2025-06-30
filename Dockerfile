@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.11-slim
 
 # Install dependencies & clean up after to reduce Docker file size
 RUN apt-get update && apt-get install -y \
